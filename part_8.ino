@@ -42,7 +42,9 @@ void setup()
   Serial.begin(115200);
   //while(!Serial) {}  //IF YOU DON'T COMMENT THIS OUT, YOU MUST OPEN THE SERIAL MONITOR TO START
   Serial.println("Hi.");
-
+  
+  buttonA.Init(); //initialize button A
+  
   noInterrupts(); //disable interupts while we mess with the Timer4 registers
   
   //sets up timer 4
@@ -153,7 +155,7 @@ void loop()
     }
 }
     //clear the timer flag
-    readyToPID = 0;
+    //readyToPID = 0;
   
   if(CheckSerialInput()) {ParseSerialInput();}
 }

@@ -1,32 +1,22 @@
+#include "Arduino.h"
 #ifndef __BUTTON_H
 #define __BUTTON_H
-#include <Arduino.h>
 
- 
-
-class Button
-{
-private:
+class Button{
+  private:
+    uint8_t buttonPin = 14; //button A on the Romi
+    uint32_t debouncePeriod = 10; // in ms
+    uint32_t lastBounceTime = 0;
+     
+    uint8_t buttonPos = HIGH; //most recent stable position
+    uint8_t lastButtonPos = HIGH; //temporary position, bouncing not complete
+    
     enum BUTTON_STATE {BUTTON_STABLE, BUTTON_UNSTABLE};
-    BUTTON_STATE state = BUTTON_STABLE;
-
-    unsigned int buttonPin = -1;
-
-   
-
-    //assume active LOW
-    unsigned int buttonPosition = HIGH; //most recent stable position
-    unsigned int tempButtonPos = HIGH; //temporary position, bouncing not complete
-
-    unsigned int lastBounceTime = 0;
-    unsigned int debouncePeriod = 10; // in ms
-
- 
-
-public:
-
-    Button(unsigned int pin, unsigned int db = 10); //default to 10 ms debounce
-    void Init(boolean usePullup = true);
-    bool CheckButtonPress(void);
+    BUTTON_STATE state = BUTTON_STABLE; 
+    
+  public:
+    Button(uint8_t pin, uint32_t db = 10);
+    void Init(bool usePullup = true);
+    bool CheckButtonPress(void);  
 };
 #endif

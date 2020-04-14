@@ -1,60 +1,42 @@
-#include "button.h"
+#include "Button.h"
 
-Button::Button (unsigned int pin, unsigned int db = 10) //default to 10 ms debounce
-{
-    this->buttonPin = pin;
-    this->debouncePeriod = db; 
+Button::Button(uint8_t pin, uint32_t db){
+  buttonPin = pin;
+  debouncePeriod = db; 
 }
 
-void Button::Init(bool usePullup = true)
-{
-    if (usePullup) pinMode(buttonPin, INPUT_PULLUP);
-    else pinMode(buttonPin, INPUT);
+void Button::Init(bool usePullup){
+  if(usePullup){
+    pinMode(buttonPin, INPUT_PULLUP);
+  }
+  else{
+    pinMode(buttonPin, INPUT);
+  }
 }
-bool Button::CheckButtonPress(void)
-{
-      if (tempButtonPos != digitalRead(buttonPin))
-      {
-         tempButtonPos = digitalRead(buttonPin);
-         state = BUTTON_UNSTABLE; 
-
+//returns true when the button transitions from unpressed to pressed 
+bool Button::CheckButtonPress(void){
+  buttonPos = digitalRead(buttonPin);
+  switch(state){
+    case BUTTON_STABLE:
+      if(buttonPos != lastButtonPos){
+        lastBounceTime = millis();  
+        state = BUTTON_UNSTABLE; 
       }
-      switch (state)
-      {
-          case BUTTON_UNSTABLE:
-              if (millis() > debouncePeriod + lastBounceTime)
-              {
-                  state = BUTTON_STABLE;
-                  return false; 
-              }
-              else
-              {
-                  if (tempButtonPos != digitalRead(buttonPin))
-                  {
-                     tempButtonPos = digitalRead(buttonPin);
-                     lastBounceTime = millis();
-                     state = BUTTON_UNSTABLE;  
-                  }
-                  return false;
-              }
-              break;
-          case BUTTON_STABLE:
-              if (buttonPosition != tempButtonPos && tempButtonPos == LOW)
-              {
-                  buttonPosition = tempButtonPos;
-                  return true;
-              }
-              else
-              {
-                  buttonPosition = tempButtonPos;
-                  return false;  
-              }
-              break;
-
- 
-
-         
-
-    }
-
+      return false;
+      break;
+    case BUTTON_UNSTABLE:                                            
+      if((millis() - lastBounceTime) >= debouncePeriod){                
+        if(buttonPos == HIGH && lastButtonPos == LOW){          
+          lastButtonPos = buttonPos;                                
+          state = BUTTON_STABLE;                                         
+          return true;
+        } 
+        else{
+          lastButtonPos = buttonPos;
+          state = BUTTON_STABLE;
+        }
+        return false;
+      }
+      break;
+  } 
 }
