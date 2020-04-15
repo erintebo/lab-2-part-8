@@ -33,7 +33,7 @@ segment segments [segCount] = {
 };
 //create global variables
 bool started = false;
-int step= 0;
+int stepp= 0;
 int startDistance = 0;
 float actualDistance = 0;
 
@@ -105,19 +105,19 @@ void CalcPID()
    //motors.setSpeeds(effortRight, 0);
    //Serial.print(millis());
    //Serial.print('\t');
-    Serial.print(targetLeft);
-    Serial.print('\t');
-    Serial.print(speedLeft);
-    Serial.print('\t');
-    Serial.print(effortLeft/10.0);
-    Serial.print('\t');
-    Serial.print(targetRight);
-    Serial.print('\t');
-    Serial.print(speedRight);
-    Serial.print('\t');
-    Serial.print(effortRight/10.0);
+   // Serial.print(targetLeft);
+   // Serial.print('\t');
+   // Serial.print(speedLeft);
+   // Serial.print('\t');
+   // Serial.print(effortLeft/10.0);
+   // Serial.print('\t');
+   // Serial.print(targetRight);
+   // Serial.print('\t');
+   // Serial.print(speedRight);
+   // Serial.print('\t');
+   // Serial.print(effortRight/10.0);
 
-    Serial.print('\n');
+   // Serial.print('\n');
 }
   
 
@@ -130,28 +130,28 @@ void loop()
         if(!started)//once button A is pressed
         {
             started = true;//start
-            step = 0;
-            //timer.Start(segments[step].duration);
+            stepp = 0;
+            //timer.Start(segments[stepp].duration);
         }
     } 
-    if(actualDistance >= segments[step].distance)
+    if(actualDistance >= segments[stepp].distance)
     {
        if (started)
        {
-          step++;
-          if(step == segCount)
+          stepp++;
+          if(stepp == segCount)
           {
             Serial.println("finsihed");
             started = false; 
           }
-         // timer.Start(segments[step].duration);
+         // timer.Start(segments[stepp].duration);
           startDistance = countsLeft;
-          Serial.println(step);
+          Serial.println(stepp);
        }
   }
     if(started)
     {
-     Drive(segments[step].iSeg);   
+     Drive(segments[stepp].iSeg);   
     }
 }
     //clear the timer flag
